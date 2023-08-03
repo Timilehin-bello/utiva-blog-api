@@ -8,5 +8,8 @@ module.exports = (router) => {
     .put(upload, postController.updatePost)
     .get(postController.getPost);
 
-  router.route("/user/post/:id").delete(postController.deletePost);
+  router
+    .route("/user/post/:id")
+    .delete(postController.deletePost)
+    .get(postController.getPostById);
 };

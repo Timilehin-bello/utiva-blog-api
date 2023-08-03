@@ -4,9 +4,10 @@ const fs = require("fs");
 
 exports.createPost = async (req, res) => {
   const { originalname, path } = req.file;
+  x;
   const { title, summary, content } = req.body;
 
-  if (!title || !summary || !content) {
+  if ((!title || !summary || !content, !originalname)) {
     res.status(400).json({
       status: "failed",
       message: "Please provide a title, summary and content",
@@ -57,7 +58,7 @@ exports.updatePost = async (req, res) => {
 
   try {
     const { token } = req.cookies;
-    jwt.verify(token, secret, {}, async (err, info) => {
+    jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
       if (err) throw err;
       const postDoc = await Post.findById(id);
       const isAuthor =
@@ -65,14 +66,13 @@ exports.updatePost = async (req, res) => {
       if (!isAuthor) {
         return res.status(400).json("you are not the author");
       }
-      await postDoc.update({
-        title,
-        summary,
-        content,
-        cover: newPath ? newPath : postDoc.cover,
-      });
+      const updatedPost = await Post.findOneAndUpdate(
+        { _id: id, author: info.id }, // The conditions to find the post
+        { title, summary, content, cover: newPath ? newPath : postDoc.cover }, // The new values to update
+        { new: true } // To return the updated postDoc
+      );
 
-      res.json(postDoc);
+      res.json(updatedPost);
     });
   } catch (error) {
     res.status(500).json({ status: "error", message: error.message });
@@ -86,13 +86,23 @@ exports.getPost = async (req, res) => {
       .sort({ createdAt: -1 })
       .limit(20);
 
-    res.status(200).json({ status: "success", data: user });
+    res.status(200).json(user);
   } catch (error) {
     res.status(500).json({ status: "error", message: error.message });
   }
 };
 
 exports.deletePost = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const postDoc = await Post.findById(id).populate("author", ["username"]);
+    res.json(postDoc);
+  } catch (error) {
+    res.status(500).json({ status: "error", message: error.message });
+  }
+};
+
+exports.getPostById = async (req, res) => {
   const { id } = req.params;
   try {
     const postDoc = await Post.findById(id).populate("author", ["username"]);
