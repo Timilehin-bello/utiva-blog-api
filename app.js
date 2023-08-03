@@ -5,6 +5,7 @@ const cookieParser = require("cookie-parser");
 dotenv.config();
 const logger = require("morgan");
 const router = require("./routes");
+const rateLimit = require("express-rate-limit");
 
 const connectDB = require("./config/db");
 const cors = require("cors");
@@ -21,8 +22,15 @@ app.use(cookieParser());
 
 app.use("/uploads", express.static(__dirname + "/uploads"));
 // app.use(express.static(path.join(__dirname, "public")));
+const limiter = rateLimit({
+  max: 100,
+  windowMs: 60 * 60 * 1000,
+  message: "Too many requests from this IP, please try again in an hour!",
+});
 
-app.use("/api", router);
+app.use("/api", limiter, router);
+// app.use("/api", router);
+
 app.get("/", (req, res) => {
   res.status(200).json({
     status: "success",
