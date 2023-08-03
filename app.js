@@ -8,7 +8,12 @@ const router = require("./routes");
 const rateLimit = require("express-rate-limit");
 
 const connectDB = require("./config/db");
-const cors = require("cors");
+const corsOptions = {
+  origin: "https://utiva-blog-frontend.vercel.app", // Replace this with your frontend application's actual domain
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 const { errorHandler, notFound } = require("./middlewares/errorMiddleware");
 connectDB();
 
