@@ -14,7 +14,7 @@ connectDB();
 
 const app = express();
 app.set("trust proxy", "loopback");
-app.use(cors());
+app.use(cors({ credentials: true, origin: "*" }));
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
