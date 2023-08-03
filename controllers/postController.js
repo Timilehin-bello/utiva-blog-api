@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const Post = require("../models/post");
+const Post = require("../models/Post");
 const fs = require("fs");
 
 exports.createPost = async (req, res) => {
