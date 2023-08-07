@@ -37,10 +37,17 @@ exports.login = async (req, res) => {
       {},
       (err, token) => {
         if (err) throw err;
-        res.cookie("token", token).json({
-          id: userDoc._id,
-          username,
-        });
+        res
+          .cookie("token", token, {
+            httpOnly: false,
+            secure: process.env.NODE_ENV !== "development", // Use secure cookies in production
+            sameSite: "strict", // Prevent CSRF attacks
+            maxAge: 2 * 24 * 60 * 60 * 1000, // 30 days
+          })
+          .json({
+            id: userDoc._id,
+            username,
+          });
       }
     );
   } else {
