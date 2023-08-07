@@ -1,5 +1,6 @@
 const express = require("express");
 const path = require("path");
+const helmet = require("helmet");
 const dotenv = require("dotenv");
 const cookieParser = require("cookie-parser");
 dotenv.config();
@@ -13,23 +14,23 @@ const { errorHandler, notFound } = require("./middlewares/errorMiddleware");
 connectDB();
 
 const app = express();
-const allowedOrigins = [
-  "https://utiva-blog-frontend.vercel.app",
-  "http://localhost:3000",
-];
+
+// Trust proxy before applying the rate limiter middleware
+// If your server is behind a proxy or load balancer, this ensures that Express uses the X-Forwarded-For header.
+// app.set("trust proxy", numberOfProxies);
+
+app.set("trust proxy", "loopback");
 
 app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (allowedOrigins.includes(origin) || !origin) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
+  helmet({
+    crossOriginResourcePolicy: {
+      policy: "cross-origin",
     },
-    credentials: true,
   })
 );
+
+// Enable CORS for cross-origin requests
+app.use(cors({ credentials: true, origin: "*" }));
 
 app.use(logger("dev"));
 app.use(express.json());
