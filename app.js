@@ -13,15 +13,15 @@ const { errorHandler, notFound } = require("./middlewares/errorMiddleware");
 connectDB();
 
 const app = express();
-// const corsOptions = {
-//   origin: [
-//     "https://utiva-blog-frontend.vercel.app",
-//     "http://localhost:3000", // Replace this with the second domain you want to allow
-//   ],
-//   credentials: true,
-// };
+const corsOptions = {
+  origin: [
+    "https://utiva-blog-frontend.vercel.app",
+    "http://localhost:3000", // Replace this with the second domain you want to allow
+  ],
+  credentials: true,
+};
 
-// app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 
 app.use(logger("dev"));
 app.use(express.json());
