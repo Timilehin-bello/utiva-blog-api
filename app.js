@@ -13,13 +13,23 @@ const { errorHandler, notFound } = require("./middlewares/errorMiddleware");
 connectDB();
 
 const app = express();
-const corsOptions = {
-  origin: ["https://utiva-blog-frontend.vercel.app", "http://localhost:3000"],
-  credentials: true,
-};
+const allowedOrigins = [
+  "https://utiva-blog-frontend.vercel.app",
+  "http://localhost:3000",
+];
 
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (allowedOrigins.includes(origin) || !origin) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 app.use(logger("dev"));
 app.use(express.json());
