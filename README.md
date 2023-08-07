@@ -52,7 +52,7 @@ Once the setup and configuration are complete, you can start the application:
 npm run dev
 ```
 
-The above command will start the Node.js server, and you should see a message indicating that the server is running. By default, the application might run on `http://localhost:3000`. Open your browser and navigate to this address to access the application.
+The above command will start the Node.js server, and you should see a message indicating that the server is running. By default, the application might run on `http://localhost:8080`. Open your browser and navigate to this address to access the application.
 
 
 
