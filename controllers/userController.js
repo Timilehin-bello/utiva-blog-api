@@ -34,10 +34,12 @@ exports.login = async (req, res) => {
     jwt.sign(
       { username, id: userDoc._id },
       process.env.JWT_SECRET,
-      {},
+      {
+        expiresIn: "30d", // 30 days
+      },
       (err, token) => {
         if (err) throw err;
-        res.cookie("token", token, {}).json({
+        res.cookie("token", token, { maxAge: 30 * 24 * 60 * 60 * 1000 }).json({
           id: userDoc._id,
           username,
         });
@@ -61,5 +63,5 @@ exports.profile = async (req, res) => {
 };
 
 exports.logout = async (req, res) => {
-  res.cookie("token", "").json("logged out");
+  res.cookie("token", "", { expires: new Date(0) }).json("logged out");
 };
