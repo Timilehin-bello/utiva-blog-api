@@ -10,6 +10,6 @@ module.exports = (router) => {
 
   router
     .route("/user/post/:id")
-    .delete(postController.deletePost)
+    .delete(postController.deletePostById)
     .get(postController.getPostById);
 };

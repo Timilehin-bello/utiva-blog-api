@@ -92,11 +92,16 @@ exports.getPost = async (req, res) => {
   }
 };
 
-exports.deletePost = async (req, res) => {
+exports.deletePostById = async (req, res) => {
   const { id } = req.params;
   try {
-    const postDoc = await Post.findById(id).populate("author", ["username"]);
-    res.json(postDoc);
+    const postDoc = await Post.findByIdAndDelete(id);
+    if (!postDoc) {
+      return res
+        .status(404)
+        .json({ status: "error", message: "Post not found" });
+    }
+    res.json({ status: "success", message: "Post deleted successfully" });
   } catch (error) {
     res.status(500).json({ status: "error", message: error.message });
   }
