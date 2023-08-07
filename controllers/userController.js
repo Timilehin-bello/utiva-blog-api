@@ -37,14 +37,10 @@ exports.login = async (req, res) => {
       {},
       (err, token) => {
         if (err) throw err;
-        res
-          .cookie("token", token, {
-            maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-          })
-          .json({
-            id: userDoc._id,
-            username,
-          });
+        res.cookie("token", token, {}).json({
+          id: userDoc._id,
+          username,
+        });
       }
     );
   } else {
