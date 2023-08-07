@@ -4,7 +4,7 @@ const fs = require("fs");
 
 exports.createPost = async (req, res) => {
   const { originalname, path } = req.file;
-  x;
+
   const { title, summary, content } = req.body;
 
   if ((!title || !summary || !content, !originalname)) {
