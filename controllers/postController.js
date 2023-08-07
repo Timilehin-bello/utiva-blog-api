@@ -21,7 +21,6 @@ exports.createPost = async (req, res) => {
     fs.renameSync(path, newPath);
 
     const { token } = req.cookies;
-    console.log(token);
     jwt.verify(token, process.env.JWT_SECRET, {}, async (err, info) => {
       if (err) throw err;
       const postDoc = await Post.create({
