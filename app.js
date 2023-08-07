@@ -14,14 +14,12 @@ connectDB();
 
 const app = express();
 const corsOptions = {
-  origin: [
-    "https://utiva-blog-frontend.vercel.app",
-    "http://localhost:3000", // Replace this with the second domain you want to allow
-  ],
+  origin: ["https://utiva-blog-frontend.vercel.app", "http://localhost:3000"],
   credentials: true,
 };
 
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(logger("dev"));
 app.use(express.json());
